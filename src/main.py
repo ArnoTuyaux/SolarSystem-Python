@@ -1,15 +1,16 @@
 import sys
 
-import pygame
 from settings import *
 from solarSystem import simulation
 
 
 pygame.init()
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+# screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 pygame.display.set_caption("Moon Frontiers")
 bg_img = pygame.image.load("../assets/background.jpg")
-background = pygame.transform.scale(bg_img, (SCREEN_WIDTH, SCREEN_HEIGHT))
+# background = pygame.transform.scale(bg_img, (SCREEN_WIDTH, SCREEN_HEIGHT))
+background = pygame.transform.scale(bg_img, (FULL_SCREEN_WIDTH, FULL_SCREEN_HEIGHT))
 
 
 def main():

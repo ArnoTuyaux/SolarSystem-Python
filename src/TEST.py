@@ -1,6 +1,6 @@
 import sys
 import pygame
-import math
+
 
 # Initialisation de Pygame
 pygame.init()

@@ -1,5 +1,6 @@
+import pygame
+
 from settings import *
-import pygame, math
 
 
 def calculate_orbit_position(angle, orbit_radius):
@@ -22,7 +23,7 @@ def simulation(screen, clock):
         screen.fill(WHITE)
         keys = pygame.key.get_pressed()
         for event in pygame.event.get():
-            if event.type == pygame.QUIT or keys[pygame.K_e]:
+            if event.type == pygame.QUIT or keys[pygame.K_ESCAPE]:
                 running = False
 
         pygame.draw.circle(screen, YELLOW, (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2), 35)

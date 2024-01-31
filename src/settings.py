@@ -1,3 +1,5 @@
+import pygame, math
+
 # screen
 SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 780
