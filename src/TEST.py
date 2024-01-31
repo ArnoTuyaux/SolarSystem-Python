@@ -37,48 +37,84 @@ ORBIT_PERIOD = {
 
 # Couleurs
 WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
 YELLOW = (255, 255, 0)
 BLUE = (0, 0, 255)
 RED = (255, 0, 0)
 
 # Création de la fenêtre
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+screen_rect = screen.get_rect()
 pygame.display.set_caption("Système Solaire")
 
-# Fonction pour calculer la position d'une planète sur son orbite
-def calculate_orbit_position(angle, orbit_radius):
-    x = SCREEN_WIDTH // 2 + orbit_radius * math.cos(math.radians(angle))
-    y = SCREEN_HEIGHT // 2 + orbit_radius * math.sin(math.radians(angle))
-    return int(x), int(y)
+surface = pygame.surface.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+
+## Fonction pour calculer la position d'une planète sur son orbite
+
+# def calculate_orbit_position(angle, orbit_radius):
+#     x = SCREEN_WIDTH // 2 + orbit_radius * math.cos(math.radians(angle))
+#     y = SCREEN_HEIGHT // 2 + orbit_radius * math.sin(math.radians(angle))
+#     return int(x), int(y)
 
 
 # Boucle principale
 clock = pygame.time.Clock()
 angles = {planet: 0 for planet in ORBIT_RADIUS.keys()}
-bg_img = pygame.image.load("../pixel_galaxy.png")
-background = pygame.transform.scale(bg_img, (SCREEN_WIDTH, SCREEN_HEIGHT))
+bg_img = pygame.image.load("../assets/background.jpg")
+# background = pygame.transform.scale(bg_img, (SCREEN_WIDTH, SCREEN_HEIGHT))
+bg_rect = bg_img.get_rect(center=screen_rect.center)
 
 running = True
+zoom_factor = 1.0
+font = pygame.font.Font(None, 24)
+
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
 
-    screen.blit(background, (0, 0))
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_a]:
+        zoom_factor += 0.01  # Increase zoom factor
+        if zoom_factor > 2:
+            zoom_factor = 2
+    elif keys[pygame.K_e]:
+        zoom_factor -= 0.01  # Decrease zoom factor, clamp it to be greater than 0
+        if zoom_factor < 1:
+            zoom_factor = 1
 
-    # Dessiner le soleil
-    pygame.draw.circle(screen, YELLOW, (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2), SUN_RADIUS)
 
-    # Dessiner les planètes et leurs orbites
-    for planet, radius in ORBIT_RADIUS.items():
-        angle = angles[planet]
-        planet_pos = calculate_orbit_position(angle, radius)
-        pygame.draw.circle(screen, BLUE if planet != "Mars" else RED, planet_pos, PLANET_RADIUS)
-        pygame.draw.circle(screen, RED, (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2), radius, 1)
-        angles[planet] += 360 / ORBIT_PERIOD[planet]  # Ajuster la vitesse de rotation
+    # screen.blit(background, (0, 0))
+
+    # # Dessiner le soleil
+    # pygame.draw.circle(screen, YELLOW, (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2), SUN_RADIUS)
+    #
+    # # Dessiner les planètes et leurs orbites
+    # for planet, radius in ORBIT_RADIUS.items():
+    #     angle = angles[planet]
+    #     planet_pos = calculate_orbit_position(angle, radius)
+    #     pygame.draw.circle(screen, BLUE if planet != "Mars" else RED, planet_pos, PLANET_RADIUS)
+    #     pygame.draw.circle(screen, RED, (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2), radius, 1)
+    #     angles[planet] += 360 / ORBIT_PERIOD[planet]  # Ajuster la vitesse de rotation
+
+    surface.fill(BLACK)
+    surface.blit(bg_img, bg_rect)
+
+    surface_mod = pygame.transform.rotozoom(surface, 0, zoom_factor)
+    surface_mod_rect = surface_mod.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
+
+    # Render zoom factor as text
+    zoom_text = font.render(f"Zoom : x{zoom_factor:.2f}", True, WHITE)
+    zoom_text_rect = zoom_text.get_rect(bottomright=(SCREEN_WIDTH - 10, SCREEN_HEIGHT - 10))
+
+    screen.fill(BLACK)
+    screen.blit(surface_mod, surface_mod_rect)
+    screen.blit(zoom_text, zoom_text_rect)
 
     pygame.display.flip()
     clock.tick(60)
+    zoom = False
+    unzoom = False
 
 pygame.quit()
 sys.exit()
