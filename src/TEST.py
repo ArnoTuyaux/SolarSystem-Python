@@ -51,9 +51,12 @@ def calculate_orbit_position(angle, orbit_radius):
     y = SCREEN_HEIGHT // 2 + orbit_radius * math.sin(math.radians(angle))
     return int(x), int(y)
 
+
 # Boucle principale
 clock = pygame.time.Clock()
 angles = {planet: 0 for planet in ORBIT_RADIUS.keys()}
+bg_img = pygame.image.load("../pixel_galaxy.png")
+background = pygame.transform.scale(bg_img, (SCREEN_WIDTH, SCREEN_HEIGHT))
 
 running = True
 while running:
@@ -61,7 +64,7 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-    screen.fill(WHITE)
+    screen.blit(background, (0, 0))
 
     # Dessiner le soleil
     pygame.draw.circle(screen, YELLOW, (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2), SUN_RADIUS)

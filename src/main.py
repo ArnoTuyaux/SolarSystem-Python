@@ -2,6 +2,7 @@ import sys
 
 import pygame
 from settings import *
+from solarSystem import simulation
 
 
 pygame.init()
@@ -24,6 +25,9 @@ def main():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+            elif event.type == pygame.KEYDOWN:
+                screen.fill(WHITE)
+                simulation(screen)
 
         screen.fill((0, 0, 0))
         screen.blit(background, (pos_x, 0))
