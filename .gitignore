@@ -1,8 +1,5 @@
-# Ignore virtual environment
 venv/
 
-# Ignore PyCharm IDE settings
 .idea/
 
-# Ignore this .gitignore file itself
 .gitignore
