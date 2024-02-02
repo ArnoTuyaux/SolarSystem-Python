@@ -1,3 +1,4 @@
+import math
 import sys
 from settings import *
 
@@ -18,6 +19,7 @@ def calculate_orbit_position(angle, orbit_radius):
     y = SCREEN_HEIGHT // 2 + orbit_radius * math.sin(math.radians(angle))
     return int(x), int(y)
 
+
 angles = {planet: 0 for planet in planets_data.keys()}
 zoom_factor = 1.0
 
@@ -25,12 +27,11 @@ zoom_factor = 1.0
 def camera_move(keys):
     global zoom_factor
     if keys[pygame.K_a]:
-        zoom_factor += 0.01  # Increase zoom factor
+        zoom_factor += 0.025 * zoom_factor  # Increase zoom factor
         if zoom_factor > 2:
             zoom_factor = 2
     elif keys[pygame.K_e]:
-        zoom_factor -= 0.01  # Decrease zoom factor, clamp it to be greater than 0
-
+        zoom_factor -= 0.025 * zoom_factor  # Decrease zoom factor, clamp it to be greater than 0
 
 
 def simulation(screen, clock):
