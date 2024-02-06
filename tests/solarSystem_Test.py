@@ -87,26 +87,33 @@ def simulation(screen, clock):
 
 
         # Dessiner le soleil
-        pygame.draw.circle(screen, YELLOW, (FULL_SCREEN_WIDTH // 2, FULL_SCREEN_HEIGHT // 2), 35 * zoom_factor)
+        pygame.draw.circle(screen, YELLOW, (FULL_SCREEN_WIDTH // 2, FULL_SCREEN_HEIGHT // 2), 50 * zoom_factor)
 
-        # Dessiner les planètes et leurs orbites
+        # Draw a selection rectangle around the selected planet
+        selected_planet = list(planets_data.keys())[planet_index]
+        selected_data = planets_data[selected_planet]
+        selected_size = selected_data["size"] // 1500 * zoom_factor + 40  # Increase the size of the rectangle
+        selected_rect = pygame.Rect(0, 0, selected_size, selected_size)
+        selected_rect.center = calculate_orbit_position(angles[selected_planet],
+                                                        selected_data["orbit_radius"] * zoom_factor + 50 * zoom_factor)
+
+        pygame.draw.rect(screen, RED, selected_rect, 2)
+
+
         for planet, data in planets_data.items():
             angle = angles[planet]
-            planet_pos = calculate_orbit_position(angle, data["orbit_radius"] * zoom_factor)  # Appliquer le zoom à la position de la planète
+
+            # place planet on orbit + size of sun
+            planet_pos = calculate_orbit_position(angle, data["orbit_radius"] * zoom_factor + 50 * zoom_factor)
+            pygame.draw.circle(screen, RED, (FULL_SCREEN_WIDTH // 2, FULL_SCREEN_HEIGHT // 2),
+                               data["orbit_radius"] * zoom_factor + 50 * zoom_factor, 1)
             pygame.draw.circle(screen, data["color"], planet_pos, data["size"] // 1500 * zoom_factor)
-            pygame.draw.circle(screen, RED, (FULL_SCREEN_WIDTH // 2, FULL_SCREEN_HEIGHT // 2), data["orbit_radius"] * zoom_factor, 1)  # Appliquer le zoom au rayon de l'orbite
+
             angles[planet] += 360 / data["orbit_period"]  # Ajuster la vitesse de rotation
 
         # focus_planet(screen, planets_data, planet_index, zoom_factor)
 
-        # Dessiner un carré de sélection autour de la planète sélectionnée
-        selected_planet = list(planets_data.keys())[planet_index]
-        selected_data = planets_data[selected_planet]
-        planet_pos = calculate_orbit_position(angles[selected_planet], selected_data["orbit_radius"] * zoom_factor)
-        selected_size = selected_data["size"] // 1500 * zoom_factor + 20
-        selected_rect = pygame.Rect(planet_pos[0] - selected_size // 2, planet_pos[1] - selected_size // 2,
-                                    selected_size, selected_size)
-        pygame.draw.rect(screen, RED, selected_rect, 2)
+
 
         # Afficher le niveau de zoom
         zoom_text = font.render(f"Zoom : x{zoom_factor:.2f}", True, BLACK)

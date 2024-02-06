@@ -30,13 +30,4 @@ planets_data = {
 }
 
 # Paramètres des planètes (nom, rayon, distance au Soleil, vitesse de rotation, couleur)
-planet_data = [
-    ("Mercury", 0.05, 0.3871, 0.2056, math.radians(7), 0.2408, GREY),
-    ("Venus", 0.1, 0.7233, 0.0067, math.radians(3.4), 0.6152, ORANGE),
-    ("Earth", 0.1, 1.0, 0.0167, math.radians(0), 1.0, BLUE),
-    ("Mars", 0.08, 1.5237, 0.0934, math.radians(1.9), 1.8809, RED),
-    ("Jupiter", 0.3, 5.2028, 0.0484, math.radians(1.3), 11.862, ORANGE),
-    ("Saturn", 0.25, 9.5388, 0.0542, math.radians(2.5), 29.457, YELLOW),
-    ("Uranus", 0.2, 19.1914, 0.0472, math.radians(0.8), 84.02, CYAN),
-    ("Neptune", 0.2, 30.0611, 0.0086, math.radians(1.8), 164.79, BLACK)
-]
+

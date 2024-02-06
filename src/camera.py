@@ -1,6 +1,5 @@
 from settings import *
 
-
 def camera_move(keys, zoom_factor):
     if keys[pygame.K_a]:
         zoom_factor += 0.025 * zoom_factor  # Increase zoom factor
