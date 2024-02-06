@@ -31,6 +31,8 @@ def main():
                 if event.key == pygame.K_SPACE:
                     screen.fill(WHITE)
                     simulation(screen, clock)
+                if event.key == pygame.K_ESCAPE:
+                    running = False
 
         screen.blit(background, (pos_x, 0))
         screen.blit(background, (SCREEN_WIDTH+pos_x, 0))
