@@ -2,15 +2,7 @@ import sys
 from settings_test import *
 
 
-# Création de la fenêtre
-screen = pygame.display.set_mode((FULL_SCREEN_WIDTH, FULL_SCREEN_HEIGHT))
-screen_rect = screen.get_rect()
-pygame.display.set_caption("Système Solaire")
 
-surface = pygame.surface.Surface((FULL_SCREEN_WIDTH, FULL_SCREEN_HEIGHT))
-
-clock = pygame.time.Clock()
-clock.tick(50)
 
 
 # def focus_planet(screen, planets_data, planet_index, zoom_factor):
@@ -67,6 +59,16 @@ def camera_move(keys):
 
 
 def simulation(screen, clock):
+    # Création de la fenêtre
+    screen = pygame.display.set_mode((FULL_SCREEN_WIDTH, FULL_SCREEN_HEIGHT))
+    screen_rect = screen.get_rect()
+    pygame.display.set_caption("Système Solaire")
+
+    surface = pygame.surface.Surface((FULL_SCREEN_WIDTH, FULL_SCREEN_HEIGHT))
+
+    clock = pygame.time.Clock()
+    clock.tick(50)
+
     pygame.font.init()
     font = pygame.font.Font(None, 24)
     running = True
