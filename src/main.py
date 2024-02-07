@@ -8,7 +8,7 @@ pygame.init()
 # screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 pygame.display.set_caption("Moon Frontiers")
-bg_img = pygame.image.load("../assets/background.jpg")
+bg_img = pygame.image.load("../assets/Space_Background.png")
 # background = pygame.transform.scale(bg_img, (SCREEN_WIDTH, SCREEN_HEIGHT))
 background = pygame.transform.scale(bg_img, (FULL_SCREEN_WIDTH, FULL_SCREEN_HEIGHT))
 
@@ -35,9 +35,9 @@ def main():
                     running = False
 
         screen.blit(background, (pos_x, 0))
-        screen.blit(background, (SCREEN_WIDTH+pos_x, 0))
+        screen.blit(background, (FULL_SCREEN_WIDTH+pos_x, 0))
 
-        if pos_x == -SCREEN_WIDTH:
+        if pos_x == -FULL_SCREEN_WIDTH:
             pos_x = 0
 
         pos_x -= 1

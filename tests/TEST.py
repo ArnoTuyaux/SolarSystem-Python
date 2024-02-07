@@ -4,6 +4,7 @@ import sys
 import pygame
 
 from settings_test import *
+
 #
 #
 # # Création de la fenêtre
@@ -74,25 +75,62 @@ from settings_test import *
 #
 # simulation(screen, clock)
 
+
 pygame.init()
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+
+screen = pygame.display.set_mode((FULL_SCREEN_WIDTH, FULL_SCREEN_HEIGHT))
 running = True
 clock = pygame.time.Clock()
-clock.tick(50)
 font = pygame.font.Font(None, 24)
 current_planet = 0
+sprite_sheet_image = pygame.image.load('../assets/27426372.png')
+screen.fill(WHITE)
+
+# class SpriteSheet:
+#     def __init__(self, image):
+#         self.sheet = image
+#
+#     def get_image(self, frame, width, height, scale, colour):
+#         image = pygame.Surface((width, height)).convert_alpha()
+#         image.blit(self.sheet, (0, 0), (frame * width, 0, width, height))
+#         image = pygame.transform.scale(image, (width * scale, height * scale))
+#         image.set_colorkey(colour)
+#         return image
+
+
+
+
+
+# Création des images individuelles à partir de la spritesheet
+frames = []
+frame_width = 200
+frame_height = 200
+for i in range(5):
+    for j in range(10):
+        frame = sprite_sheet_image.subsurface(i * frame_width, j * frame_height, frame_width, frame_height)
+        frames.append(frame)
+
 
 def test_index_select(screen, dico, key):
     return key
 
 
+index = 0  # Indice pour sélectionner les images de la spritesheet
+frame_counter = 0  # Counter to control animation speed
+
 while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
+            running = False
+
     screen.fill(WHITE)
-    keys = pygame.key.get_pressed()
-    if keys[pygame.K_LEFT] or keys[pygame.K_RIGHT]:
-        current_planet = test_index_select(screen, planets_data, keys)
-    elif keys[pygame.K_ESCAPE]:
-        pygame.quit()
-        running = False
-    current_planet_text = font.render(f'Planet: {current_planet}', True, BLACK)
-    screen.blit(current_planet_text, (0, 0))
+
+    # Display the current frame
+    screen.blit(frames[index], (FULL_SCREEN_WIDTH // 2, FULL_SCREEN_HEIGHT // 2))
+
+    index = (index + 1) % len(frames)
+
+    pygame.display.flip()
+    clock.tick(60)
+
+pygame.quit()
