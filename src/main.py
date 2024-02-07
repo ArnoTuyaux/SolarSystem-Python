@@ -15,8 +15,6 @@ background = pygame.transform.scale(bg_img, (FULL_SCREEN_WIDTH, FULL_SCREEN_HEIG
 
 
 def main():
-
-    in_game = False
     clock = pygame.time.Clock()
     pos_x = 0
     running = True

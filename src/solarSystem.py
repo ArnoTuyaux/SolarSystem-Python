@@ -3,10 +3,6 @@ import pygame.image
 from settings import *
 
 
-# def Animation():
-
-
-
 class Sun:
     def __init__(self):
         self.size = 300
@@ -33,6 +29,10 @@ class Planete:
         self.size = size
         self.color = color
         self.angle = 0
+        self.sprite_sheet_image = pygame.image.load('../assets/planets/Earth.png')
+        self.sprite_sheet = SpriteSheet(self.sprite_sheet_image)
+        self.animation_list = []
+        self.pos = []
 
     def calculate_position(self, zoom_factor):
         x = (FULL_SCREEN_WIDTH // 2 + (self.orbit_radius * zoom_factor + sun.size * zoom_factor)
@@ -42,11 +42,12 @@ class Planete:
         return int(x), int(y)
 
     def draw(self, screen, zoom_factor):
-        planet_pos = self.calculate_position(zoom_factor)
-        pygame.draw.circle(screen, RED, (FULL_SCREEN_WIDTH // 2, FULL_SCREEN_HEIGHT // 2),
-                           self.orbit_radius * zoom_factor + sun.size * zoom_factor, 1)
-        pygame.draw.circle(screen, self.color, planet_pos, self.size // 1500 * zoom_factor)
-        self.angle += 360 / self.orbit_period  # Ajuster la vitesse de rotation
+        pass
+        # planet_pos = self.calculate_position(zoom_factor)
+        # pygame.draw.circle(screen, RED, (FULL_SCREEN_WIDTH // 2, FULL_SCREEN_HEIGHT // 2),
+        #                    self.orbit_radius * zoom_factor + sun.size * zoom_factor, 1)
+        # pygame.draw.circle(screen, self.color, planet_pos, self.size // 1500 * zoom_factor)
+        # self.angle += 360 / self.orbit_period  # Ajuster la vitesse de rotation
 
 
 def simulation(screen, clock, frame, last_update):
@@ -54,7 +55,7 @@ def simulation(screen, clock, frame, last_update):
     font = pygame.font.Font(None, 24)  # Définie la police
     running = True
     zoom_factor = 0.50  # coefficient de zoom
-    sun.animation(jeu.animation_steps)
+    # sun.animation(jeu.animation_steps)
 
     planet_list = []
     for planet_name, planet_data in planets_data.items():
@@ -71,14 +72,30 @@ def simulation(screen, clock, frame, last_update):
             if event.type == pygame.QUIT or keys[pygame.K_ESCAPE]:
                 running = False
 
+        for planet in planet_list:
+            for x in range(jeu.animation_steps):
+                planet.animation_list.append(planet.sprite_sheet.get_image(x, jeu.frame_width, jeu.frame_height, 1, BLACK))
+
         # Soleil
         # sun.sprite = pygame.transform.scale(sun.sprite, (sun.size * zoom_factor, sun.size * zoom_factor))
         # sun.draw(screen, frame)
         pygame.draw.circle(screen, YELLOW, (FULL_SCREEN_WIDTH // 2, FULL_SCREEN_HEIGHT // 2), sun.size * zoom_factor)
-
-        # Planetes
         for planet in planet_list:
-            planet.draw(screen, zoom_factor)
+            planet.pos = planet.calculate_position(zoom_factor)
+            current_sprite = planet.sprite_sheet.get_image(frame, jeu.frame_width, jeu.frame_height, zoom_factor, BLACK)
+
+            # Calculate the new position for centering the sprite after zooming
+            sprite_width, sprite_height = current_sprite.get_size()
+            blit_x = (planet.pos[0] - sprite_width) // 2
+            blit_y = (planet.pos[1] - sprite_height) // 2
+
+            # Display the current frame with adjusted blit position
+            screen.blit(current_sprite, (blit_x, blit_y))
+            planet.angle += 360 / planet.orbit_period  # Ajuster la vitesse de rotation
+
+        # # Planetes
+        # for planet in planet_list:
+        #     planet.draw(screen, zoom_factor)
 
         # Update animation
         current_time = pygame.time.get_ticks()
