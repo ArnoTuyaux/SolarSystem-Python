@@ -1,7 +1,8 @@
 import sys
 
 from settings import *
-from solarSystem import simulation
+from solarSystem import *
+from jeu import Jeu
 
 
 pygame.init()
@@ -30,7 +31,7 @@ def main():
             elif event.type == pygame.KEYUP:
                 if event.key == pygame.K_SPACE:
                     screen.fill(WHITE)
-                    simulation(screen, clock)
+                    simulation(screen, clock, jeu.frame, jeu.last_update)
                 if event.key == pygame.K_ESCAPE:
                     running = False
 
