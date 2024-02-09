@@ -2,6 +2,10 @@ import pygame.image
 
 from settings import *
 
+pygame.display.set_caption("Moon Frontiers")
+bg_img = pygame.image.load("../assets/Space_Background.png")
+# background = pygame.transform.scale(bg_img, (SCREEN_WIDTH, SCREEN_HEIGHT))
+background = pygame.transform.scale(bg_img, (FULL_SCREEN_WIDTH, FULL_SCREEN_HEIGHT))
 
 class Sun:
     def __init__(self):
@@ -42,8 +46,18 @@ class Planete:
         return int(x), int(y)
 
     def draw(self, screen, zoom_factor):
-        pass
-        # planet_pos = self.calculate_position(zoom_factor)
+        self.pos = self.calculate_position(zoom_factor)
+        current_sprite = self.sprite_sheet.get_image(jeu.frame, jeu.frame_width, jeu.frame_height, 1, BLACK)
+
+        # Calculate the new position for centering the sprite after zooming
+        blit_x = self.pos[0] - (jeu.frame_width * zoom_factor) // 2
+        blit_y = self.pos[1] - (jeu.frame_height * zoom_factor) // 2
+
+        # Display the current frame with adjusted blit position
+        screen.blit(current_sprite, (blit_x, blit_y))
+        self.angle += 360 / self.orbit_period  # Adjust the rotation speed
+
+    # planet_pos = self.calculate_position(zoom_factor)
         # pygame.draw.circle(screen, RED, (FULL_SCREEN_WIDTH // 2, FULL_SCREEN_HEIGHT // 2),
         #                    self.orbit_radius * zoom_factor + sun.size * zoom_factor, 1)
         # pygame.draw.circle(screen, self.color, planet_pos, self.size // 1500 * zoom_factor)
@@ -65,6 +79,7 @@ def simulation(screen, clock, frame, last_update):
 
     while running:
         screen.fill(WHITE)  # Clear de l'écran
+        screen.blit(background, (0, 0))
         keys = pygame.key.get_pressed()  # Récupère la touche pressée
         zoom_factor = camera_move(keys, zoom_factor)
 
@@ -81,17 +96,7 @@ def simulation(screen, clock, frame, last_update):
         # sun.draw(screen, frame)
         pygame.draw.circle(screen, YELLOW, (FULL_SCREEN_WIDTH // 2, FULL_SCREEN_HEIGHT // 2), sun.size * zoom_factor)
         for planet in planet_list:
-            planet.pos = planet.calculate_position(zoom_factor)
-            current_sprite = planet.sprite_sheet.get_image(frame, jeu.frame_width, jeu.frame_height, zoom_factor, BLACK)
-
-            # Calculate the new position for centering the sprite after zooming
-            sprite_width, sprite_height = current_sprite.get_size()
-            blit_x = (planet.pos[0] - sprite_width) // 2
-            blit_y = (planet.pos[1] - sprite_height) // 2
-
-            # Display the current frame with adjusted blit position
-            screen.blit(current_sprite, (blit_x, blit_y))
-            planet.angle += 360 / planet.orbit_period  # Ajuster la vitesse de rotation
+            planet.draw(screen, zoom_factor)
 
         # # Planetes
         # for planet in planet_list:
