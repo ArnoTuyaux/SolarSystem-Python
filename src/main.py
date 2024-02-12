@@ -1,9 +1,4 @@
-import sys
-
-from settings import *
 from solarSystem import *
-from jeu import Jeu
-
 
 pygame.init()
 # screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -34,7 +29,7 @@ def main():
                     running = False
 
         screen.blit(background, (pos_x, 0))
-        screen.blit(background, (FULL_SCREEN_WIDTH+pos_x, 0))
+        screen.blit(background, (FULL_SCREEN_WIDTH + pos_x, 0))
 
         if pos_x == -FULL_SCREEN_WIDTH:
             pos_x = 0

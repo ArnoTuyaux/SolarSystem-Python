@@ -163,6 +163,7 @@ class Sun:
         self.sprite = pygame.image.load("../assets/sun.png")
         self.sprite_sheet = SpriteSheet(self.sprite)
         self.animation_list = self.load_animation(jeu_test.animation_steps)
+        self.pos = (screen.get_width() // 2, screen.get_height() // 2)
 
     def load_animation(self, steps):
         animation_list = []
@@ -194,28 +195,29 @@ class Planete:
             animation_list.append(self.sprite_sheet.get_image(x, jeu_test.frame_width, jeu_test.frame_height, 1, BLACK))
         return animation_list
 
-    def calculate_position(self, zoom_factor, orbit_radius):
+    def calculate_position(self, zoom_factor):
         # x = FULL_SCREEN_WIDTH // 2 + orbit_radius * math.cos(math.radians(angle))
-        # #     y = FULL_SCREEN_HEIGHT // 2 + orbit_radius * math.sin(math.radians(angle))
+        # y = FULL_SCREEN_HEIGHT // 2 + orbit_radius * math.sin(math.radians(angle))
 
-        sun_radius = sun.size * zoom_factor  # Taille du soleil avec le facteur de zoom
-        x = (FULL_SCREEN_WIDTH // 2 + orbit_radius * math.cos(math.radians(self.angle)))
-        y = (FULL_SCREEN_HEIGHT // 2 + orbit_radius * math.sin(math.radians(self.angle)))
+        x = (sun.pos[0] + self.orbit_radius * math.cos(math.radians(self.angle)))
+        y = (sun.pos[1] + self.orbit_radius * math.sin(math.radians(self.angle)))
         return int(x), int(y)
 
     def draw(self, screen, zoom_factor):
-        self.pos = self.calculate_position(zoom_factor, self.orbit_radius * zoom_factor + 50 * zoom_factor)
+        self.pos = self.calculate_position(zoom_factor)
         current_frame = int(self.angle * len(self.animation_list) / 360)
         if current_frame >= len(self.animation_list):
             current_frame %= len(self.animation_list)  # Wrap around if current_frame exceeds list length
         current_sprite = self.animation_list[current_frame]
 
-        # Calculate the new position for centering the sprite after zooming
-        blit_x = self.pos[0] - (jeu_test.frame_width * zoom_factor) // 2
-        blit_y = self.pos[1] - (jeu_test.frame_height * zoom_factor) // 2
+        # # Calculate the new position for centering the sprite after zooming
+        # sprite_width, sprite_height = current_sprite.get_size()
+        # blit_x = self.pos[0] - (sprite_width * zoom_factor) // 2
+        # blit_y = self.pos[1] - (sprite_height * zoom_factor) // 2
 
         # Display the current frame with adjusted blit position
-        screen.blit(current_sprite, (blit_x, blit_y))
+        # screen.blit(current_sprite, (blit_x, blit_y))
+        screen.blit(current_sprite, self.pos)
         self.angle += 360 / self.orbit_period  # Adjust the rotation speed
 
 
@@ -244,7 +246,8 @@ def simulation(screen, clock, frame, last_update):
         # Soleil
         # sun.sprite = pygame.transform.scale(sun.sprite, (sun.size * zoom_factor, sun.size * zoom_factor))
         # sun.draw(screen, frame)
-        pygame.draw.circle(screen, YELLOW, (FULL_SCREEN_WIDTH // 2, FULL_SCREEN_HEIGHT // 2), sun.size * zoom_factor)
+
+        pygame.draw.circle(screen, YELLOW, sun.pos, sun.size * zoom_factor)
         for planet in planet_list:
             planet.draw(screen, zoom_factor)
 
