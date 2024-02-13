@@ -133,6 +133,7 @@ def test_index_select(screen, dico, key):
 index = 0  # Indice pour sélectionner les images de la spritesheet
 frame_counter = 0  # Counter to control animation speed
 planet_angle = 0
+angle = 0
 
 while running:
     keys = pygame.key.get_pressed()
@@ -162,6 +163,13 @@ while running:
     sprite_width, sprite_height = current_sprite.get_size()
     blit_x = (FULL_SCREEN_WIDTH - sprite_width) // 2 + planets_data["Earth"]["orbit_radius"]
     blit_y = (FULL_SCREEN_HEIGHT - sprite_height) // 2 + planets_data["Earth"]["orbit_radius"]
+
+    x = (FULL_SCREEN_WIDTH // 2 + (planets_data["Earth"]["orbit_radius"] * zoom_factor + sun_size * zoom_factor)
+         * math.cos(math.radians(angle)))
+    y = (FULL_SCREEN_HEIGHT // 2 + (planets_data["Earth"]["orbit_radius"] * zoom_factor + sun_size * zoom_factor)
+         * math.sin(math.radians(angle)))
+
+    angle += 360 / planets_data["Earth"]["orbit_period"]
 
 
     # Display the current frame with adjusted blit position
