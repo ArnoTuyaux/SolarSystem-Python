@@ -1,3 +1,5 @@
+# **ABANDONED**
+
 # **SolarSystem-Python**
 Semester 2 project at ESAIP; solar system in python
 
